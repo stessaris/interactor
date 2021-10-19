@@ -109,6 +109,7 @@ Interactor.prototype = {
                 targetTag       : e.target.nodeName,
                 targetClasses   : e.target.className,
                 content         : e.target.innerText,
+                targetId        : e.target.id,
                 clientPosition  : {
                     x               : e.clientX,
                     y               : e.clientY
