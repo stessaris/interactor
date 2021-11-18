@@ -128,9 +128,7 @@ Interactor.prototype = {
 
         // Log Interaction if Debugging
         if (interactor.debug) {
-            // Close Session & Log to Console
-            interactor.__closeSession__();
-            console.log("Session:\n", interactor.session);
+            console.log("Interaction:\n", interaction, JSON.stringify(interaction));
         }
 
         return interactor;
@@ -181,6 +179,11 @@ Interactor.prototype = {
             outerWidth      : window.outerWidth,
             outerHeight     : window.outerHeight
         };
+
+        // Log Interaction if Debugging (remember to make console persistent)
+        if (interactor.debug) {
+            console.log("Session:\n", JSON.stringify(interactor.session));
+        }
 
         return interactor;
     },
