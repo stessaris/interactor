@@ -67,32 +67,32 @@ Interactor.prototype = {
 
         // Set Interaction Capture
         if (interactor.interactions === true) {
-            for (var i = 0; i < interactor.interactionEvents.length; i++) {
-                document.querySelector('body').addEventListener(interactor.interactionEvents[i], function (e) {
+            for (const eventName of interactor.interactionEvents) {
+                document.querySelector('body').addEventListener(eventName, function (e) {
                     e.stopPropagation();
-                    if (e.target.classList.value === interactor.interactionElement) {
+                    if (e.target.classList.contains(interactor.interactionElement)) {
                         interactor.__addInteraction__(e, "interaction");
                     }
                 });
-            }   
+            }
         }
 
         // Set Conversion Capture
         if (interactor.conversions === true) {
-            for (var i = 0; i < interactor.conversionEvents.length; i++) {
-                document.querySelector('body').addEventListener(interactor.conversionEvents[i], function (e) {
+            for (const eventName of interactor.conversionEvents) {
+                document.querySelector('body').addEventListener(eventName, function (e) {
                     e.stopPropagation();
-                    if (e.target.classList.value === interactor.conversionElement) {
+                    if (e.target.classList.contains(interactor.conversionEvents)) {
                         interactor.__addInteraction__(e, "conversion");
                     }
                 });
-            }   
+            }
         }
 
         // Bind onbeforeunload Event
-        window.onbeforeunload = function (e) {
+        window.addEventListener('beforeunload', function (e) {
             interactor.__sendInteractions__();
-        };
+        });
         
         return interactor;
     },
