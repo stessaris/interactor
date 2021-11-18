@@ -26,6 +26,8 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+const _version_ = '1.5.0+nxtg';
+
 var Interactor = function (config) {
     // Call Initialization on Interactor Call
     this.__init__(config);
