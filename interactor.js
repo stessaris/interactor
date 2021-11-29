@@ -50,6 +50,7 @@ Interactor.prototype = {
         interactor.endpoint           = typeof(config.endpoint)                   == "string"     ? config.endpoint           : '/interactions',
         interactor.async              = typeof(config.async)                      == "boolean"    ? config.async              : true,
         interactor.debug              = typeof(config.debug)                      == "boolean"    ? config.debug              : true,
+        interactor.storage            = typeof(config.storage)                    == "boolean"    ? config.storage            : true,
         interactor.records            = [],
         interactor.session            = {},
         interactor.loadTime           = new Date();
@@ -179,6 +180,9 @@ Interactor.prototype = {
             outerWidth      : window.outerWidth,
             outerHeight     : window.outerHeight
         };
+        if (interactor.storage) {
+            interactor.session.storage = Object.fromEntries(Object.entries(window.sessionStorage));
+        }
 
         // Log Interaction if Debugging (remember to make console persistent)
         if (interactor.debug) {
