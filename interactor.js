@@ -92,11 +92,14 @@ Interactor.prototype = {
             }
         }
 
-        // Bind onbeforeunload Event
-        window.addEventListener('beforeunload', function (e) {
-            interactor.__sendInteractions__();
+        // Use the more reliable visibilitychange event to send data
+        //  see <https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon#sending_analytics_at_the_end_of_a_session>
+        document.addEventListener('visibilitychange', function logData() {
+            if (document.visibilityState === 'hidden') {
+                interactor.__sendInteractions__();
+            }
         });
-        
+
         return interactor;
     },
 
@@ -196,17 +199,17 @@ Interactor.prototype = {
     // Gather Additional Data and Send Interaction(s) to Server
     __sendInteractions__: function () {
         
-        var interactor  = this,
-            // Initialize Cross Header Request
-            xhr         = new XMLHttpRequest();
-            
+        var interactor  = this;
+
         // Close Session
         interactor.__closeSession__();
 
-        // Post Session Data Serialized as JSON
-        xhr.open('POST', interactor.endpoint, interactor.async);
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        xhr.send(JSON.stringify(interactor.session));
+        if (interactor.debug) {
+            console.log(`Sending interaction data to ${interactor.endpoint}`)
+        }
+        // use Beacon API <https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon>
+        let blob = new Blob([JSON.stringify(interactor.session)], {type : 'application/json'});
+        navigator.sendBeacon(interactor.endpoint, blob);
 
         return interactor;
     }
