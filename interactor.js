@@ -28,6 +28,42 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 const _version_ = '1.5.3+nxtg';
 
+/**
+ * Returns a selector for the DOM Element
+ *  see <https://stackoverflow.com/a/66291608>
+ * 
+ * @param {Element} elem
+ * @returns {string}
+ */
+function elemToSelector(elem) {
+    const {
+      tagName,
+      id,
+      className,
+      parentNode
+    } = elem;
+  
+    if (tagName === 'HTML') return 'HTML';
+  
+    let str = tagName;
+  
+    str += (id !== '') ? `#${id}` : '';
+  
+    if (className) {
+      const classes = className.split(/\s/);
+      classes.forEach(cname => {
+          str += `.${cname}`
+      });
+    }
+
+    if (elem.nextElementSibling || elem.previousElementSibling) {
+        let childIndex = 1;
+        for (let e = elem; e.previousElementSibling; e = e.previousElementSibling, childIndex++);
+        str += `:nth-child(${childIndex})`;
+    }
+    return `${elemToSelector(parentNode)}>${str}`;
+}
+
 var Interactor = function (config) {
     // Call Initialization on Interactor Call
     this.__init__(config);
@@ -116,6 +152,7 @@ Interactor.prototype = {
                 targetClasses   : e.target.className,
                 content         : e.target.innerText,
                 targetId        : e.target.id,
+                selector        : elemToSelector(e.target),
                 clientPosition  : {
                     x               : e.clientX,
                     y               : e.clientY
